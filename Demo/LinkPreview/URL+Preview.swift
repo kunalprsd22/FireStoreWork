@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Kanna
 
 public extension URL {
     
@@ -35,7 +34,7 @@ public extension URL {
                 if urlResponse.statusCode >= 200 && urlResponse.statusCode < 400 {
                     if let data = data {
                         
-                        if let doc = try? Kanna.HTML(html: data, encoding: String.Encoding.utf8) {
+                        if let doc = try? HTML(html: data, encoding: String.Encoding.utf8) {
                             let title = doc.title
                             var description: String? = nil
                             var previewImage: String? = nil

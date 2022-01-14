@@ -10,16 +10,13 @@ import UIKit
 import IGListKit
 
 class NameSectionController: ListSectionController {
-    var entry: NameDataModel!
+    var textRow: TextRow?
 
     override init() {
       super.init()
         
     }
     
-    override func numberOfItems() -> Int {
-      return 2
-    }
     
     override func sizeForItem(at index: Int) -> CGSize {
         return CGSize(width: collectionContext?.containerSize.width ?? 0.0,height: 50)
@@ -28,13 +25,14 @@ class NameSectionController: ListSectionController {
     override func cellForItem(at index: Int) -> UICollectionViewCell {
        let cell =  collectionContext!.dequeueReusableCell(withNibName:"LabelCell", bundle: nil, for: self, at: index)
         if let cell = cell as? LabelCell{
-            cell.name.text = entry.name
+            cell.name.text = textRow?.text
         }
        return cell
      }
     
     override func didUpdate(to object: Any) {
-      entry = object as? NameDataModel
+      textRow = object as? TextRow
+        
     }
     
     override func didSelectItem(at index: Int) {

@@ -18,13 +18,11 @@ class ImageSectionController: ListSectionController {
     }
 
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        guard let cell = collectionContext?.dequeueReusableCell(of: ImageCell.self, for: self, at: index) as? ImageCell else {
-            fatalError()
-        }
+         guard let cell =  collectionContext!.dequeueReusableCell(withNibName:"ImageCell", bundle: nil, for: self, at: index) as? ImageCell else { fatalError()}
+        
+        guard let image = image else { return cell}
 
-        guard let image = image else { return cell }
-
-        cell.image = image
+        cell.imageView.image = image
 
         return cell
     }

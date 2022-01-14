@@ -10,9 +10,13 @@ import UIKit
 
 class LabelCell: UICollectionViewCell {
 
+    
+    @IBOutlet weak var name: UILabel!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+       
     }
 
 }

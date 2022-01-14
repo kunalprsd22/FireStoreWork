@@ -53,6 +53,14 @@ public final class AHDownloadButton: UIView {
         }
     }
     
+    public var startDownloadButtonImage: UIImage? = nil {
+        didSet {
+            startDownloadButton.setImage(UIImage(named: "icRecorder"), for: .normal)
+            startDownloadButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10);
+            startDownloadButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0);
+        }
+    }
+    
     public var startDownloadButtonTitleFont: UIFont = .boldSystemFont(ofSize: 15) {
         didSet {
             startDownloadButton.titleLabel?.font = startDownloadButtonTitleFont

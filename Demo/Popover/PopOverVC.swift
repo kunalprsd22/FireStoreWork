@@ -8,23 +8,29 @@
 
 import UIKit
 
-class PopOverVC: UIViewController {
+class PopOverVC: UIViewController,UIPopoverPresentationControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+    }
+
+    @IBAction func click(_ sender: UIButton) {
+        
+        var popoverContent = (self.storyboard?.instantiateViewController(withIdentifier: "ThirdVC")) as! ThirdVC
+            popoverContent.modalPresentationStyle = UIModalPresentationStyle.popover
+            let popover = popoverContent.popoverPresentationController
+            popoverContent.preferredContentSize = CGSize(width: 120, height: 40)
+            popover?.delegate = self
+            popover?.sourceView = sender
+            popover?.permittedArrowDirections  = .up
+            present(popoverContent, animated: true, completion:nil)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
-    */
+    
+    
 
 }

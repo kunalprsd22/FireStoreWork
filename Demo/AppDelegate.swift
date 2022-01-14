@@ -7,31 +7,68 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    
+    var window: UIWindow?
+    var backgroundUpdateTask: UIBackgroundTaskIdentifier!
+    var backgroundTaskTimer:Timer! = Timer()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        FirebaseApp.configure()
         return true
     }
-
-    // MARK: UISceneSession Lifecycle
-
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        self.doBackgroundTask()
     }
-
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        if self.backgroundTaskTimer != nil {
+            self.backgroundTaskTimer.invalidate()
+            self.backgroundTaskTimer = nil
+        }
     }
-
-
 }
 
+
+extension AppDelegate{
+    
+    func doBackgroundTask() {
+        DispatchQueue.global(qos: .default).async {
+            self.beginBackgroundTask()
+            
+            if self.backgroundTaskTimer != nil {
+                self.backgroundTaskTimer.invalidate()
+                self.backgroundTaskTimer = nil
+            }
+            
+            //Making the app to run in background forever by calling the API
+            self.backgroundTaskTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startTracking), userInfo: nil, repeats: true)
+            RunLoop.current.add(self.backgroundTaskTimer, forMode: RunLoop.Mode.default)
+            RunLoop.current.run()
+            
+            // End the background task.
+            self.endBackgroundTask()
+            
+        }
+    }
+    
+    func beginBackgroundTask() {
+        self.backgroundUpdateTask = UIApplication.shared.beginBackgroundTask(withName: "Track trip", expirationHandler: {
+            self.endBackgroundTask()
+        })
+    }
+    
+    func endBackgroundTask() {
+        UIApplication.shared.endBackgroundTask(self.backgroundUpdateTask)
+        self.backgroundUpdateTask = UIBackgroundTaskIdentifier.invalid
+    }
+    
+    @objc func startTracking(){
+        print("Calling")
+    }
+}

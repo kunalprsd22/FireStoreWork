@@ -9,15 +9,7 @@
 import UIKit
 import IGListKit
 
-extension UIImage: ListDiffable {
-    public func diffIdentifier() -> NSObjectProtocol {
-        return self
-    }
 
-    public func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        return true
-    }
-}
 
 class ImageListSectionController: ListSectionController, ListAdapterDataSource {
     var imageListRow: ImageListRow?

@@ -7,24 +7,63 @@
 //
 
 import UIKit
+import RealmSwift
 
 class RealmVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setData()
+        //updateDB()
+        //deleteUser()
+        let realm = try! Realm()
+        print(realm.configuration.fileURL)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func setData(){
+        
+        let realm = try! Realm()
+        
+        let passport = Passport("123","12 Dec")
+        let toDo1 = ToDo("Testing1")
+        let toDo2 = ToDo("Testing2")
+        
+        
+        let user = User("Sony", id: "3")
+        user.passport = passport
+        user.toDo.append(objectsIn:[toDo1,toDo2])
+        
+        try! realm.write{
+            user.toDo.append(objectsIn:[toDo1,toDo2])
+        }
+        
     }
-    */
-
+    
+    
+    func updateDB(){
+        let realm = try! Realm()
+        
+        let toDo =  realm.object(ofType: Passport.self, forPrimaryKey: "123")
+        
+        try! realm.write{
+            toDo?.date = "13 Dec"
+        }
+    }
+    
+    func deleteUser(){
+        let realm = try! Realm()
+        
+        if let toDo =  realm.object(ofType: Passport.self, forPrimaryKey: "123"){
+        
+        try! realm.write{
+            realm.delete(toDo)
+        }
+        }
+    }
+    
+    
 }
+
+
+

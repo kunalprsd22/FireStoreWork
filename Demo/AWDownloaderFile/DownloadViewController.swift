@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AHDownloadButton
 
 class DownloadViewController: UIViewController {
     
@@ -25,9 +24,10 @@ class DownloadViewController: UIViewController {
         view.addSubview(downloadButton)
         
         downloadButton.delegate = self
-        downloadButton.startDownloadButtonTitle = "hhhhh"
+        downloadButton.startDownloadButtonTitle = "Download"
+        //downloadButton.startDownloadButtonImage = UIImage(named: "icRecorder")
         downloadButton.startDownloadButtonTitleFont = UIFont.boldSystemFont(ofSize: 35)
-        downloadButton.startDownloadButtonTitleSidePadding = 80
+        downloadButton.startDownloadButtonTitleSidePadding = 40
         
         downloadButton.pendingCircleLineWidth = 5
         downloadButton.downloadingButtonCircleLineWidth = 5

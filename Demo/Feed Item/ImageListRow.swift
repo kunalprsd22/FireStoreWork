@@ -9,22 +9,10 @@
 import IGListKit
 import UIKit
 
-class ImageListRow: ListDiffable {
-    let pk: Int
+class ImageListRow: NSObject {
     let images: [UIImage]
 
-    init(pk: Int, images: [UIImage]) {
-        self.pk = pk
+    init(images: [UIImage]) {
         self.images = images
-    }
-
-    func diffIdentifier() -> NSObjectProtocol {
-        return pk as NSObjectProtocol
-    }
-
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        guard self !== object else { return true }
-        guard let object = object as? ImageListRow else { return false }
-        return images == object.images
     }
 }

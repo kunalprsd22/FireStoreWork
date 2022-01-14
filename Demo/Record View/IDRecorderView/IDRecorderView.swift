@@ -11,7 +11,6 @@ import AVFoundation
 import Shimmer
 
 
-
 class IDRecorderView: UIView {
 
     private let kInitialCancelViewTrailingConstant: CGFloat = 50.0
@@ -47,27 +46,28 @@ class IDRecorderView: UIView {
     @IBOutlet weak var audioBtnCenterYConstraint: NSLayoutConstraint!
     @IBOutlet weak var cancelViewTrailingSpace: NSLayoutConstraint!
     @IBOutlet weak var btnCancel: UIButton!
+    @IBOutlet weak var backRoundView: UIView!
     
     
     // MARK: - Life cycle Methods
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.initializeFromNib()
-        self.setupFont()
+        initializeFromNib()
+        setupFont()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.initializeFromNib()
-        self.setupFont()
+        initializeFromNib()
+        setupFont()
     }
     
     // MARK: - Private Methods
     private func setupFont() {
-        self.lblSlideToCancel.font = AppFonts.SF_Pro_Regular.withSize(14)
-        self.lblSlideToCancel.text = "<" + StringConstants.slideToCancel.localized
-        self.lblTime.font = AppFonts.SF_Pro_Regular.withSize(14)
-        self.btnCancel.setTitle(StringConstants.Cancel.localized, for: .normal)
+        //lblSlideToCancel.font = AppFonts.SF_Pro_Regular.withSize(14)
+        lblSlideToCancel.text = "< " + "Slide to cancel"
+        //lblTime.font = AppFonts.SF_Pro_Regular.withSize(14)
+        btnCancel.setTitle("Cancel", for: .normal)
     }
     private func initializeFromNib() {
         let bundle = Bundle(for: type(of: self))
@@ -75,20 +75,31 @@ class IDRecorderView: UIView {
         let view = nib.instantiate(withOwner: self, options: nil)[0] as! UIView
         view.frame = bounds
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.addSubview(view)
-        self.shimmerViews()
+        addSubview(view)
+        shimmerViews()
     }
     
     override func layoutSubviews() {
-        self.containerView.round(radius: self.containerView.frame.height)
+        containerView.layer.masksToBounds = true
+        containerView.layoutIfNeeded()
+        containerView.layer.cornerRadius = containerView.frame.height
     }
     
+    override func draw(_ rect: CGRect) {
+        backRoundView.layer.masksToBounds = true
+        backRoundView.layoutIfNeeded()
+        backRoundView.layer.cornerRadius = backRoundView.frame.height/2
+        
+        
+    }
+    
+    
     private func shimmerViews() {
-        self.cancelLabelView.contentView = lblSlideToCancel
-        self.cancelLabelView.shimmeringDirection = .left
-        self.cancelLabelView.shimmeringSpeed = 150
-        self.cancelLabelView.shimmeringHighlightLength = 0.4
-        self.cancelLabelView.isShimmering = true
+        cancelLabelView.contentView = lblSlideToCancel
+        cancelLabelView.shimmeringDirection = .left
+        cancelLabelView.shimmeringSpeed = 150
+        cancelLabelView.shimmeringHighlightLength = 0.4
+        cancelLabelView.isShimmering = true
     }
 
     @IBAction func tapSendVoiceMsg(_ sender: UIButton) {
@@ -148,7 +159,7 @@ class IDRecorderView: UIView {
             audioRecorder?.prepareToRecord()
         }
         catch let error {
-            print_debug(error.localizedDescription)
+            debugPrint(error.localizedDescription)
         }
     }
 
@@ -301,7 +312,6 @@ class IDRecorderView: UIView {
                 if currentValue > 15 {
                     let scalingRatio = (115-currentValue)/100
                     self.lockViewHeightConstraint.constant = scalingRatio * 160.0
-                    print_debug(scalingRatio)
                     if scalingRatio <= 0.33 {
                         self.lockRecording()
                         gestureControl(true)
@@ -324,7 +334,6 @@ class IDRecorderView: UIView {
                 self.trailingAudioBtnConstraint.constant = 15.0
                 self.audioBtnCenterYConstraint.constant = 0.0
                 self.lastLocation = self.initialCenter
-                print_debug("Reset Position")
             }
         } else {
             // It is the first location update
@@ -344,7 +353,6 @@ class IDRecorderView: UIView {
                 if currentValue > 15 {
                     let scalingRatio = (115-currentValue)/100
                     self.lockViewHeightConstraint.constant = scalingRatio * 160.0
-                    print_debug(scalingRatio)
                     if scalingRatio <= 0.33 {
                         self.lockRecording()
                         gestureControl(true)
@@ -357,7 +365,6 @@ class IDRecorderView: UIView {
                 self.trailingAudioBtnConstraint.constant = 15.0
                 self.audioBtnCenterYConstraint.constant = 0.0
                 self.lastLocation = self.initialCenter
-                print_debug("print Reset Position")
             }
         }
 
@@ -393,9 +400,13 @@ class IDRecorderView: UIView {
         self.meterTimer?.invalidate()
         if success {
             self.recordedVoiceMsgHandler?(self.audioFileName, ceil(duration))
-            print_debug("recorded successfully.")
+            debugPrint("recorded successfully.")
         } else  {
-            print_debug("Recording failed")
+            if let fileName = audioFileName{
+            guard let completeFilePath = LocalFileOperation.shared.getCompleteFilePath(fileName: fileName, mediaType: .audio) else{ return }
+            LocalFileOperation.shared.removeFileWithCompletePath(filePath: completeFilePath)
+            }
+            debugPrint("Recording failed")
         }
     }
 }

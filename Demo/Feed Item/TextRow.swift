@@ -9,22 +9,11 @@
 import UIKit
 import IGListKit
 
-class TextRow: ListDiffable {
-    let pk: Int
+class TextRow: NSObject {
     let text: String
 
-    init(pk: Int, text: String) {
-        self.pk = pk
+    init(text: String) {
         self.text = text
     }
 
-    func diffIdentifier() -> NSObjectProtocol {
-        return pk as NSObjectProtocol
-    }
-
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        guard self !== object else { return true }
-        guard let object = object as? TextRow else { return false }
-        return text == object.text
-    }
 }

@@ -184,7 +184,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         let superSize = super.intrinsicContentSize
         textContainer.size = CGSize(width: superSize.width, height: CGFloat.greatestFiniteMagnitude)
         let size = layoutManager.usedRect(for: textContainer)
-        return CGSize(width: ceil(size.width), height: ceil(size.height))
+        return CGSize(width: ceil(size.width), height: ceil(superSize.height))
     }
     
     // MARK: - touch events

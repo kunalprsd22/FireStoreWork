@@ -174,10 +174,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     CFRange rangeToSize = CFRangeMake(0, (CFIndex)[attributedString length]);
     CGSize constraints = CGSizeMake(size.width, TTTFLOAT_MAX);
 
-    if (numberOfLines == 1) {
+    //if (numberOfLines == 1) {
         // If there is one line, the size that fits is the full width of the line
         constraints = CGSizeMake(TTTFLOAT_MAX, TTTFLOAT_MAX);
-    } else if (numberOfLines > 0) {
+    //} else if (numberOfLines > 0) {
         // If the line count of the label more than 1, limit the range to size to the number of lines that have been set
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, TTTFLOAT_MAX));
@@ -194,7 +194,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
         CFRelease(frame);
         CGPathRelease(path);
-    }
+    //}
 
     CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, rangeToSize, NULL, constraints, NULL);
 

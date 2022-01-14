@@ -7,3 +7,13 @@
 //
 
 import Foundation
+
+class CreateCSVFile {
+    
+    private init() {}
+    static let shared = CreateCSVFile()
+
+    
+    
+
+}

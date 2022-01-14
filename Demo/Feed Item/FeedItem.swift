@@ -9,22 +9,11 @@
 import UIKit
 import IGListKit
 
-class FeedItem: ListDiffable {
-    let pk: Int
+class FeedItem: NSObject {
     let rows: [ListDiffable]
 
-    init(pk: Int, rows: [ListDiffable]) {
-        self.pk = pk
+    init(rows: [ListDiffable]) {
         self.rows = rows
     }
 
-    func diffIdentifier() -> NSObjectProtocol {
-        return pk as NSObjectProtocol
-    }
-
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        guard self !== object else { return true }
-        guard let object = object as? FeedItem else { return false }
-        return zip(rows, object.rows).allSatisfy({ $0.isEqual(toDiffableObject: $1) })
-    }
 }

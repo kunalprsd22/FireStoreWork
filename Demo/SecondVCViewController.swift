@@ -7,24 +7,80 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import NSObject_Rx
 
 class SecondVCViewController: UIViewController {
-
+    
+    
+    @IBOutlet weak var textField1: UITextField!
+    @IBOutlet weak var textField2: UITextField!
+    
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let observe1 = textField1.rx.text.asObservable()
+        let observe2 = textField2.rx.text.asObservable()
 
-        // Do any additional setup after loading the view.
+        
+
+//        //let observe1Stream = observe1.map { [weak self] (text) -> Bool in
+//            if text?.count == 0{
+//                return false
+//            }else{
+//                return true
+//            }
+//        }
+
+        let observe2Stream = observe2.map { [weak self] (text) -> Bool in
+            print("ddddd")
+            
+            if text?.count == 0{
+                return false
+            }else{
+                return true
+            }
+        }
+        
+        let observe1Stream = textField1.rx.text.map { (value) -> Bool in
+            if value?.count == 0{
+                return false
+            }else{
+                return true
+            }
+        }
+        
+
+        
+
+//        let enableButton = Observable.combineLatest(observe1Stream, observe2Stream) { (login, name) in
+//            return login && name
+//        }
+//
+//        enableButton.bind(onNext: {value in
+//            print(value)
+//        }).disposed(by: rx.disposeBag)
+        
+        
+        
+        
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    
+    @IBAction func click(_ sender: Any) {
+        
     }
-    */
-
+    
+    
+    
+    
 }
+
+

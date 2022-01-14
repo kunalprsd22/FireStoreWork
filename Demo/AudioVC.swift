@@ -7,24 +7,35 @@
 //
 
 import UIKit
+import AVFoundation
 
 class AudioVC: UIViewController {
 
+    var fileUrl:URL!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        fileUrl = URL(string: "https://appinventiv-development.s3.amazonaws.com/iOS/99067382-C3F3-40B8-9492-0D923C5806BB.m4a")
+    }
+    
+    @IBAction func playClick(_ sender: UIButton) {
+        playAudio()
+    }
+    
+    
+    func playAudio(){
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+            let playerItem = AVPlayerItem(url: fileUrl)
+            let player = AVPlayer(playerItem: playerItem)
+            player.play()
+            
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
